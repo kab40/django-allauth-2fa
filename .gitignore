@@ -17,3 +17,5 @@ htmlcov
 
 # Docs
 _build
+
+env/

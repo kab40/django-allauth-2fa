@@ -22,7 +22,7 @@ def generate_totp_config_svg(device, issuer, label):
     img = qrcode.make(otpauth_url, image_factory=SvgPathImage)
     io = BytesIO()
     img.save(io)
-    return io.getvalue()
+    return io.getvalue(), otpauth_url
 
 
 def generate_totp_config_svg_for_device(request, device):

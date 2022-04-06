@@ -1,5 +1,4 @@
 from base64 import b64encode
-
 from allauth.account import signals
 from allauth.account.adapter import get_adapter
 from allauth.account.utils import get_login_redirect_url
@@ -112,12 +111,13 @@ class TwoFactorSetup(LoginRequiredMixin, FormView):
         return super().get(request, *args, **kwargs)
 
     def get_qr_code_data_uri(self):
-        svg_data = generate_totp_config_svg_for_device(self.request, self.device)
-        return f"data:image/svg+xml;base64,{force_str(b64encode(svg_data))}"
+        svg_data, otpauth_url = generate_totp_config_svg_for_device(self.request, self.device)
+        x = f"data:image/svg+xml;base64,{force_str(b64encode(svg_data))}"
+        return x, otpauth_url
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["qr_code_url"] = self.get_qr_code_data_uri()
+        context["qr_code_url"], context["otpauth_url"] = self.get_qr_code_data_uri()
         return context
 
     def get_form_kwargs(self):
